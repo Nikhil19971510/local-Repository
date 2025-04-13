@@ -18,16 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
 
     @Autowired
-    private RoomService roomService ;
+    private RoomService roomService;
 
     @PostMapping(value = "/saveRoom", produces = MediaType.APPLICATION_JSON_VALUE)
     public APIResponse saveRoom(@RequestBody RoomDto roomDto) {
         try {
-        APIResponse apiResponse = roomService.saveRoom(roomDto);
-        System.out.println("apiResponse : " + apiResponse);
-        return apiResponse;
-    } catch (Exception e) {
-        return new APIResponse(MessageUtilty.HttpStatus_INTERNAL_SERVER_ERROR, 500, HttpStatus.INTERNAL_SERVER_ERROR);
+            APIResponse apiResponse = roomService.saveRoom(roomDto);
+            System.out.println("apiResponse : " + apiResponse);
+            return apiResponse;
+        } catch (Exception e) {
+            return new APIResponse(MessageUtilty.HttpStatus_INTERNAL_SERVER_ERROR, 500, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-}
 }
