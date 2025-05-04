@@ -2,6 +2,7 @@ package com.springboot.common;
 
 import jakarta.persistence.*;
 
+@SuppressWarnings("All")
 @MappedSuperclass
 public abstract class EntityIdentity {
 

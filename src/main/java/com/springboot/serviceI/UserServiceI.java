@@ -7,5 +7,4 @@ public interface UserServiceI {
 
     public APIResponse createUser(UserRequest userRequest) ;
 
-
 }

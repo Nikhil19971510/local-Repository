@@ -1,20 +1,15 @@
 package com.springboot.dto;
 
 import com.springboot.enums.UserRole;
+import lombok.Builder;
 
+
+
+@SuppressWarnings("All")
 public class AuthenticationResponse {
-    private int userId ;
-    private String jwt ;
-    private UserRole role ;
-
-    public AuthenticationResponse(int userId, String jwt, UserRole role) {
-        this.userId = userId;
-        this.jwt = jwt;
-        this.role = role;
-    }
-
-    public AuthenticationResponse() {
-    }
+    private int userId;
+    private String jwt;
+    private UserRole role;
 
     public int getUserId() {
         return userId;

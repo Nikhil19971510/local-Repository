@@ -1,29 +1,18 @@
 package com.springboot.controller;
 
-import com.springboot.dto.AuthenticationRequest;
-import com.springboot.dto.AuthenticationResponse;
-import com.springboot.jwt.AuthUserServiceI;
-import com.springboot.jwt.JwtUtils;
+
+import com.springboot.dto.*;
+import com.springboot.jwt.*;
+import com.springboot.utils.*;
+import org.springframework.http.*;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.web.bind.annotation.*;
 import com.springboot.model.User;
 import com.springboot.repo.UserRepository;
 import com.springboot.request.UserRequest;
 import com.springboot.serviceI.UserServiceI;
-import com.springboot.utils.APIResponse;
-import com.springboot.utils.MessageUtilty;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Optional;
 
 @RestController
@@ -50,7 +39,7 @@ public class UserController {
             System.out.println("apiResponse : " + apiResponse);
             return apiResponse;
         } catch (Exception e) {
-            return new APIResponse(MessageUtilty.HttpStatus_INTERNAL_SERVER_ERROR, 500, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new APIResponse(MessageUtility.HttpStatus_INTERNAL_SERVER_ERROR, 500, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -62,16 +51,21 @@ public class UserController {
             Optional<User> optionalUser = userRepository.findFirstByEmail(authenticationRequest.getEmail());
 
             if (optionalUser.isEmpty()) {
-                throw new UsernameNotFoundException(MessageUtilty.USER_NOT_FOUND);
+                throw new UsernameNotFoundException(MessageUtility.USER_NOT_FOUND);
             } else {
-                UserDetails userDetails = authUserServiceI.userDetails().loadUserByUsername(authenticationRequest.getEmail());
+                UserDetails userDetails = authUserServiceI.userDetails()
+                        .loadUserByUsername(authenticationRequest.getEmail());
+
                 String jwt = jwtUtils.generateToken(userDetails.getUsername());
 
-                AuthenticationResponse response = new AuthenticationResponse();
-                response.setJwt(jwt);
-                response.setUserId(optionalUser.get().getId());
-                response.setRole(optionalUser.get().getRole());
-                return ResponseEntity.ok(new APIResponse(MessageUtilty.LOGIN_SUCCESSFULLY, 200, response));
+                AuthenticationResponse authResponse = new AuthenticationResponse();
+                authResponse.setJwt(jwt);
+                authResponse.setUserId(optionalUser.get().getId());
+                authResponse.setRole(optionalUser.get().getRole());
+
+                return ResponseEntity.ok(
+                        new APIResponse(MessageUtility.LOGIN_SUCCESSFULLY, 200, authResponse)
+                );
             }
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIResponse("Invalid credentials", 401, HttpStatus.UNAUTHORIZED));

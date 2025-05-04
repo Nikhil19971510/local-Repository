@@ -1,6 +1,6 @@
 package com.springboot.utils;
 
-public class MessageUtilty {
+public class MessageUtility {
 
     public static String USER_CREATE_SUCCESSFULLY = "user created SuccessFull.";
     public static String USER_NOT_VALID_REQUEST = "user not valid request.";

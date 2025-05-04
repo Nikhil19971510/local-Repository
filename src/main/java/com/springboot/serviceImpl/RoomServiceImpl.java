@@ -5,19 +5,22 @@ import com.springboot.model.Room;
 import com.springboot.repo.RoomRepository;
 import com.springboot.serviceI.RoomService;
 import com.springboot.utils.APIResponse;
-import com.springboot.utils.MessageUtilty;
+import com.springboot.utils.MessageUtility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomServiceImpl implements RoomService {
     @Autowired
     private RoomRepository roomRepository;
-
+    private static final Logger logger = LoggerFactory.getLogger(RoomServiceImpl.class);
 
     @Override
     public APIResponse saveRoom(RoomDto roomRequest) {
@@ -30,7 +33,18 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomtype(roomRequest.getType());
         room.setIsavailable(roomRequest.isAvailable());
         Room roomSave = roomRepository.save(room);
-        return new APIResponse(MessageUtilty.ROOM_CREATED_SUCCESSFULLY, 200, roomSave);
+        return new APIResponse(MessageUtility.ROOM_CREATED_SUCCESSFULLY, 200, roomSave);
+    }
+
+    @Override
+    public List<Room> getAllRoom() {
+        List<Room> allRooms = roomRepository.findAll();
+        if (allRooms.isEmpty() || allRooms.stream().noneMatch(Objects::nonNull)) {
+            logger.warn("No valid room data found.");
+            return Collections.emptyList();
+        }
+        logger.warn("valid room data found.");
+        return allRooms.stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 //
 //    @Override
