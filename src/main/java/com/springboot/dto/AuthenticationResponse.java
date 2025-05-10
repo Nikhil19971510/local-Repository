@@ -6,6 +6,7 @@ import lombok.Builder;
 
 
 @SuppressWarnings("All")
+@Builder
 public class AuthenticationResponse {
     private int userId;
     private String jwt;

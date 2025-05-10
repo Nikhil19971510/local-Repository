@@ -58,10 +58,8 @@ public class UserController {
 
                 String jwt = jwtUtils.generateToken(userDetails.getUsername());
 
-                AuthenticationResponse authResponse = new AuthenticationResponse();
-                authResponse.setJwt(jwt);
-                authResponse.setUserId(optionalUser.get().getId());
-                authResponse.setRole(optionalUser.get().getRole());
+                AuthenticationResponse authResponse = AuthenticationResponse.builder()
+                        .jwt(jwt).userId(optionalUser.get().getId()).role(optionalUser.get().getRole()).build();
 
                 return ResponseEntity.ok(
                         new APIResponse(MessageUtility.LOGIN_SUCCESSFULLY, 200, authResponse)
