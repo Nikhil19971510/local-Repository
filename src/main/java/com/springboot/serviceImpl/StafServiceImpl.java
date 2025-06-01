@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class StafServiceImpl implements StafServiceI {
+public class StaffServiceImpl implements StafServiceI {
 
     @Autowired
     private StaffRepository staffRepository;
